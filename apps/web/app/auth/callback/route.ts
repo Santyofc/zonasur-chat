@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from '../../lib/supabase-server'
+import { createSupabaseServerClient } from '../../../lib/supabase-server'
 import { NextResponse } from 'next/server'
 
 /** OAuth callback handler — exchanges code for session and redirects */

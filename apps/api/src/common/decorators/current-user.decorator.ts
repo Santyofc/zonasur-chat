@@ -2,7 +2,7 @@ import {
   createParamDecorator,
   ExecutionContext,
   UnauthorizedException,
-} from '@nestjs/common';
+} from "@nestjs/common";
 
 export interface AuthUser {
   id: string;
@@ -17,7 +17,7 @@ export const CurrentUser = createParamDecorator(
   (_data: unknown, ctx: ExecutionContext): AuthUser => {
     const request = ctx.switchToHttp().getRequest<{ user?: AuthUser }>();
     if (!request.user) {
-      throw new UnauthorizedException('No user in request context');
+      throw new UnauthorizedException("No user in request context");
     }
     return request.user;
   },

@@ -1,11 +1,14 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
-import { Throttle } from '@nestjs/throttler';
-import { MessagesService } from './messages.service';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { JwtGuard } from '../../common/guards/jwt.guard';
-import { CurrentUser, AuthUser } from '../../common/decorators/current-user.decorator';
+import { Controller, Post, Body, UseGuards } from "@nestjs/common";
+import { Throttle } from "@nestjs/throttler";
+import { MessagesService } from "./messages.service";
+import { CreateMessageDto } from "./dto/create-message.dto";
+import { JwtGuard } from "../../common/guards/jwt.guard";
+import {
+  CurrentUser,
+  AuthUser,
+} from "../../common/decorators/current-user.decorator";
 
-@Controller('messages')
+@Controller("messages")
 @UseGuards(JwtGuard)
 export class MessagesController {
   constructor(private readonly messages: MessagesService) {}

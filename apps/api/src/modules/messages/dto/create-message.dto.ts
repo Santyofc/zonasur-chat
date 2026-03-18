@@ -1,4 +1,11 @@
-import { IsString, IsNotEmpty, IsUUID, IsEnum, IsOptional, MaxLength } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsUUID,
+  IsEnum,
+  IsOptional,
+  MaxLength,
+} from "class-validator";
 
 export class CreateMessageDto {
   @IsUUID(4)
@@ -10,8 +17,8 @@ export class CreateMessageDto {
   content!: string;
 
   @IsOptional()
-  @IsEnum(['text', 'image', 'video', 'audio', 'file'])
-  type?: string = 'text';
+  @IsEnum(["text", "image", "video", "audio", "file"])
+  type?: string = "text";
 
   @IsOptional()
   @IsUUID(4)

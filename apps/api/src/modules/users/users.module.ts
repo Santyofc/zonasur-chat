@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
-import { JwtGuard } from '../../common/guards/jwt.guard';
+import { Module } from "@nestjs/common";
+import { UsersController } from "./users.controller";
+import { UsersService } from "./users.service";
+import { JwtGuard } from "../../common/guards/jwt.guard";
 
 @Module({
   controllers: [UsersController],

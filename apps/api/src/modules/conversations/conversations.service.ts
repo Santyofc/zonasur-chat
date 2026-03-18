@@ -1,19 +1,25 @@
 import {
   Injectable,
-  NotFoundException,
   BadRequestException,
-} from '@nestjs/common';
-import { SupabaseService } from '../../config/supabase.service';
-import { CreateDirectConversationDto } from './dto/create-direct-conversation.dto';
+  NotFoundException,
+} from "@nestjs/common";
+import { SupabaseService } from "../../config/supabase.service";
+import { CreateDirectConversationDto } from "./dto/create-direct-conversation.dto";
+import { UserIdentityService } from "../../common/services/user-identity.service";
 
 @Injectable()
 export class ConversationsService {
-  constructor(private readonly supabase: SupabaseService) {}
+  constructor(
+    private readonly supabase: SupabaseService,
+    private readonly userIdentity: UserIdentityService,
+  ) {}
 
   /** Get all conversations for a user (ordered by last message) */
-  async findAllForUser(userId: string) {
+  async findAllForUser(authUserId: string) {
+    const userId =
+      await this.userIdentity.resolvePublicUserIdOrThrow(authUserId);
     const { data, error } = await this.supabase.admin.rpc(
-      'get_user_conversations',
+      "get_user_conversations",
       { p_user_id: userId },
     );
     if (error) throw new BadRequestException(error.message);
@@ -25,18 +31,13 @@ export class ConversationsService {
     authUserId: string,
     dto: CreateDirectConversationDto,
   ) {
-    // Resolve public user id from auth_id
-    const { data: me } = await this.supabase.admin
-      .from('users')
-      .select('id')
-      .eq('auth_id', authUserId)
-      .single();
-    if (!me) throw new NotFoundException('Your user profile was not found');
+    const userId =
+      await this.userIdentity.resolvePublicUserIdOrThrow(authUserId);
 
     const { data, error } = await this.supabase.admin.rpc(
-      'get_or_create_direct_conversation',
+      "get_or_create_direct_conversation",
       {
-        p_user_a: me.id,
+        p_user_a: userId,
         p_user_b: dto.target_user_id,
       },
     );
@@ -46,39 +47,41 @@ export class ConversationsService {
 
   /** Get a conversation by id (verifies membership) */
   async findOne(conversationId: string, authUserId: string) {
-    const { data: me } = await this.supabase.admin
-      .from('users')
-      .select('id')
-      .eq('auth_id', authUserId)
-      .single();
-    if (!me) throw new NotFoundException('User not found');
+    const userId = await this.userIdentity.resolvePublicUserId(authUserId);
+    if (!userId) throw new NotFoundException("User not found");
 
     const { data, error } = await this.supabase.admin
-      .from('conversations')
+      .from("conversations")
       .select(
         `*, conversation_members!inner(user_id, role, joined_at, last_read_at)`,
       )
-      .eq('id', conversationId)
-      .eq('conversation_members.user_id', me.id)
+      .eq("id", conversationId)
+      .eq("conversation_members.user_id", userId)
       .single();
 
-    if (error || !data) throw new NotFoundException('Conversation not found');
+    if (error || !data) throw new NotFoundException("Conversation not found");
     return data;
   }
 
-  async verifyMembership(conversationId: string, authUserId: string): Promise<boolean> {
-    const { data: me } = await this.supabase.admin
-      .from('users')
-      .select('id')
-      .eq('auth_id', authUserId)
-      .single();
-    if (!me) return false;
+  async verifyMembership(
+    conversationId: string,
+    authUserId: string,
+  ): Promise<boolean> {
+    const userId = await this.userIdentity.resolvePublicUserId(authUserId);
+    if (!userId) return false;
 
+    return this.verifyMembershipByPublicUserId(conversationId, userId);
+  }
+
+  async verifyMembershipByPublicUserId(
+    conversationId: string,
+    userId: string,
+  ): Promise<boolean> {
     const { data } = await this.supabase.admin
-      .from('conversation_members')
-      .select('id')
-      .eq('conversation_id', conversationId)
-      .eq('user_id', me.id)
+      .from("conversation_members")
+      .select("id")
+      .eq("conversation_id", conversationId)
+      .eq("user_id", userId)
       .single();
 
     return !!data;

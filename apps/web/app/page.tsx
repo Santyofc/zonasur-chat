@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createSupabaseServerClient } from '../../lib/supabase-server'
+import { createSupabaseServerClient } from '../lib/supabase-server'
 
 /** Root / redirects based on auth */
 export default async function HomePage() {

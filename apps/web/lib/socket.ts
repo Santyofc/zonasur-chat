@@ -98,3 +98,8 @@ export function onPresenceUpdate(socket: Socket, cb: (e: PresenceUpdateEvent) =>
   socket.on('presence:update', cb)
   return () => socket.off('presence:update', cb)
 }
+
+export function onError(socket: Socket, cb: (e: { message: string }) => void) {
+  socket.on('error', cb)
+  return () => socket.off('error', cb)
+}

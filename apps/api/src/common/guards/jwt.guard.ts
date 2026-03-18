@@ -4,8 +4,8 @@ import {
   ExecutionContext,
   UnauthorizedException,
   Logger,
-} from '@nestjs/common';
-import { SupabaseService } from '../../config/supabase.service';
+} from "@nestjs/common";
+import { SupabaseService } from "../../config/supabase.service";
 
 /**
  * JWT Guard for HTTP routes.
@@ -25,15 +25,17 @@ export class JwtGuard implements CanActivate {
     }>();
 
     const authHeader = request.headers.authorization;
-    if (!authHeader?.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Missing or invalid Authorization header');
+    if (!authHeader?.startsWith("Bearer ")) {
+      throw new UnauthorizedException(
+        "Missing or invalid Authorization header",
+      );
     }
 
     const token = authHeader.slice(7);
     const user = await this.supabase.verifyToken(token);
 
     if (!user) {
-      throw new UnauthorizedException('Invalid or expired token');
+      throw new UnauthorizedException("Invalid or expired token");
     }
 
     request.user = user;

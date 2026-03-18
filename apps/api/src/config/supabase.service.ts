@@ -1,6 +1,6 @@
-import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { Injectable, OnModuleInit, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 /**
  * Server-side Supabase admin client.
@@ -15,9 +15,11 @@ export class SupabaseService implements OnModuleInit {
   constructor(private readonly config: ConfigService) {}
 
   onModuleInit() {
-    const url = this.config.getOrThrow<string>('NEXT_PUBLIC_SUPABASE_URL');
+    const url =
+      this.config.get<string>("SUPABASE_URL") ??
+      this.config.getOrThrow<string>("NEXT_PUBLIC_SUPABASE_URL");
     const serviceRoleKey = this.config.getOrThrow<string>(
-      'SUPABASE_SERVICE_ROLE_KEY',
+      "SUPABASE_SERVICE_ROLE_KEY",
     );
 
     this.client = createClient(url, serviceRoleKey, {
@@ -27,7 +29,7 @@ export class SupabaseService implements OnModuleInit {
       },
     });
 
-    this.logger.log('Supabase admin client initialized');
+    this.logger.log("Supabase admin client initialized");
   }
 
   /** Returns the admin Supabase client */

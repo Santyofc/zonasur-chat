@@ -8,6 +8,7 @@ import {
   leaveConversation,
   onNewMessage,
   onTypingUpdate,
+  onError,
 } from '../../lib/socket'
 import { MessageBubble } from './MessageBubble'
 import { MessageInput } from './MessageInput'
@@ -69,6 +70,11 @@ export function ChatWindow({ conversationId }: Props) {
       const socket = getSocket(token)
       joinConversation(socket, conversationId)
 
+      // Error listener
+      const offError = onError(socket, (err) => {
+        setError(err.message)
+      })
+
       // New message listener
       const offNew = onNewMessage(socket, (event) => {
         if (event.message.conversation_id !== conversationId) return
@@ -108,6 +114,7 @@ export function ChatWindow({ conversationId }: Props) {
       cleanup = [
         offNew,
         offTyping,
+        offError,
         () => leaveConversation(socket, conversationId),
       ]
     }

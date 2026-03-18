@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
-import { ConversationsController } from './conversations.controller';
-import { ConversationsService } from './conversations.service';
-import { JwtGuard } from '../../common/guards/jwt.guard';
-import { MessagesModule } from '../messages/messages.module';
+import { Module } from "@nestjs/common";
+import { ConversationsController } from "./conversations.controller";
+import { ConversationsService } from "./conversations.service";
+import { JwtGuard } from "../../common/guards/jwt.guard";
+import { MessagesModule } from "../messages/messages.module";
 
 @Module({
   imports: [MessagesModule],

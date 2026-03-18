@@ -1,18 +1,14 @@
+import { Controller, Get, Post, Body, Param, UseGuards } from "@nestjs/common";
+import { ConversationsService } from "./conversations.service";
+import { MessagesService } from "../messages/messages.service";
+import { JwtGuard } from "../../common/guards/jwt.guard";
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
-import { ConversationsService } from './conversations.service';
-import { MessagesService } from '../messages/messages.service';
-import { JwtGuard } from '../../common/guards/jwt.guard';
-import { CurrentUser, AuthUser } from '../../common/decorators/current-user.decorator';
-import { CreateDirectConversationDto } from './dto/create-direct-conversation.dto';
+  CurrentUser,
+  AuthUser,
+} from "../../common/decorators/current-user.decorator";
+import { CreateDirectConversationDto } from "./dto/create-direct-conversation.dto";
 
-@Controller('conversations')
+@Controller("conversations")
 @UseGuards(JwtGuard)
 export class ConversationsController {
   constructor(
@@ -27,7 +23,7 @@ export class ConversationsController {
   }
 
   /** POST /api/conversations/direct */
-  @Post('direct')
+  @Post("direct")
   async createDirect(
     @CurrentUser() user: AuthUser,
     @Body() dto: CreateDirectConversationDto,
@@ -36,10 +32,10 @@ export class ConversationsController {
   }
 
   /** GET /api/conversations/:id/messages */
-  @Get(':id/messages')
+  @Get(":id/messages")
   async getMessages(
     @CurrentUser() user: AuthUser,
-    @Param('id') conversationId: string,
+    @Param("id") conversationId: string,
   ) {
     // Verify membership before returning messages
     await this.conversations.findOne(conversationId, user.id);

@@ -11,7 +11,11 @@
     "build": "pnpm build:api && pnpm build:web",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
-    "clean": "pnpm -r --parallel exec rm -rf dist .next node_modules/.cache"
+    "clean": "pnpm -r --parallel exec rm -rf dist .next node_modules/.cache",
+    "supabase:stop": "supabase stop",
+    "supabase:start": "supabase start",
+    "supabase:reset": "supabase db reset",
+    "supabase:push": "supabase db push"
   },
   "engines": {
     "node": ">=20.0.0",
