@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-zs-bg-primary text-zs-text-primary font-sans antialiased;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-zs-bg-primary;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zs-border rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-zs-text-muted;
+  }
+}
+
+@layer components {
+  .zs-input {
+    @apply w-full bg-zs-bg-surface border border-zs-border rounded-lg px-4 py-2.5
+           text-zs-text-primary placeholder:text-zs-text-muted
+           focus:outline-none focus:border-zs-accent focus:ring-1 focus:ring-zs-accent
+           transition-colors duration-150;
+  }
+
+  .zs-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg
+           bg-zs-accent text-zs-bg-primary font-semibold text-sm
+           hover:bg-zs-accent-hover active:scale-95
+           transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .zs-btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg
+           text-zs-text-secondary hover:bg-zs-bg-hover hover:text-zs-text-primary
+           transition-all duration-150;
+  }
+
+  .zs-card {
+    @apply bg-zs-bg-secondary border border-zs-border rounded-xl shadow-zs-card;
+  }
+}

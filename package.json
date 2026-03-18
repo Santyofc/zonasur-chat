@@ -1,0 +1,23 @@
+{
+  "name": "zonasur-chat",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ZonaSur Chat — Private WhatsApp-style messaging for closed communities",
+  "scripts": {
+    "dev:web": "pnpm --filter @zs/web dev",
+    "dev:api": "pnpm --filter @zs/api start:dev",
+    "build:web": "pnpm --filter @zs/web build",
+    "build:api": "pnpm --filter @zs/api build",
+    "build": "pnpm build:api && pnpm build:web",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "clean": "pnpm -r --parallel exec rm -rf dist .next node_modules/.cache"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
